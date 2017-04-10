@@ -24,8 +24,6 @@ final class MemberRegistered extends AggregateChanged
     protected $vehicleId;
     /** @var \DateTime */
     protected $joiningDate;
-    /** @var \DateTime */
-    protected $leavingDate;
 
     /**
      * @param \Northfire\Domain\Model\Member\MemberId  $memberId
@@ -34,11 +32,10 @@ final class MemberRegistered extends AggregateChanged
      * @param string                                   $lastName
      * @param \Northfire\Domain\Model\Member\VehicleId $vehicleId
      * @param \DateTime                                $joiningDate
-     * @param \DateTime                                $leavingDate
      *
      * @return \Northfire\Domain\Model\Member\MemberRegistered
      */
-    public static function withData(MemberId $memberId, string $memberNumber, string $firstName, string $lastName, VehicleId $vehicleId, \DateTime $joiningDate, \DateTime $leavingDate)
+    public static function withData(MemberId $memberId, string $memberNumber, string $firstName, string $lastName, VehicleId $vehicleId, \DateTime $joiningDate)
     {
         $event = self::occur(
             $memberId->toString(),
@@ -46,9 +43,8 @@ final class MemberRegistered extends AggregateChanged
                 'memberNumber' => $memberNumber,
                 'firstName'    => $firstName,
                 'lastName'     => $lastName,
-                'vehicleId'    => $vehicleId,
-                'joiningDate'  => $joiningDate->format('d.m.Y H:i:s'),
-                'leavingDate'  => $leavingDate->format('d.m.Y H:i:s')
+                'vehicleId'    => $vehicleId->toString(),
+                'joiningDate'  => $joiningDate->format('d.m.Y H:i:s')
             ]
         );
 
@@ -58,7 +54,6 @@ final class MemberRegistered extends AggregateChanged
         $event->lastName = $lastName;
         $event->vehicleId = $vehicleId;
         $event->joiningDate = $joiningDate;
-        $event->leavingDate = $leavingDate;
 
         return $event;
     }
@@ -133,17 +128,5 @@ final class MemberRegistered extends AggregateChanged
         }
 
         return $this->joiningDate;
-    }
-
-    /**
-     * @return \DateTime
-     */
-    public function leavingDate(): \DateTime
-    {
-        if (null === $this->leavingDate) {
-            $this->leavingDate = \DateTime::createFromFormat('d.m.Y H:i:s', $this->payload['leavingDate']);;
-        }
-
-        return $this->leavingDate;
     }
 }

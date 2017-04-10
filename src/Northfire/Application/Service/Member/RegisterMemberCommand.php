@@ -45,12 +45,6 @@ final class RegisterMemberCommand
      * @Assert\Type(type="datetime")
      */
     protected $joiningDate;
-    /**
-     * @var \DateTime
-     * @Assert\NotBlank()
-     * @Assert\Type(type="datetime")
-     */
-    protected $leavingDate;
 
     /**
      * @return \Northfire\Domain\Model\Member\MemberId
@@ -86,14 +80,6 @@ final class RegisterMemberCommand
     public function joiningDate(): \DateTime
     {
         return $this->joiningDate;
-    }
-
-    /**
-     * @return \DateTime
-     */
-    public function leavingDate(): \DateTime
-    {
-        return $this->leavingDate;
     }
 
     /**

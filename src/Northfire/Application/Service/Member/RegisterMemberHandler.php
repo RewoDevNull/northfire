@@ -38,8 +38,7 @@ final class RegisterMemberHandler
             $command->firstName(),
             $command->lastName(),
             VehicleId::fromString($command->vehicleId()),
-            $command->joiningDate(),
-            $command->leavingDate()
+            $command->joiningDate()
         );
 
         $this->memberRepository->add($member);

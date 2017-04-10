@@ -42,14 +42,13 @@ class Member extends AggregateRoot
      * @param string                                   $aLastName
      * @param \Northfire\Domain\Model\Member\VehicleId $aVehicleId
      * @param \DateTime                                $aJoiningDate
-     * @param \DateTime                                $aLeavingDate
      *
      * @return \Northfire\Domain\Model\Member\Member
      */
-    public static function registerNew(MemberId $aMemberId, string $aMemberNumber, string $aFirstName, string $aLastName, VehicleId $aVehicleId, \DateTime $aJoiningDate, \DateTime $aLeavingDate): self
+    public static function registerNew(MemberId $aMemberId, string $aMemberNumber, string $aFirstName, string $aLastName, VehicleId $aVehicleId, \DateTime $aJoiningDate): self
     {
         $self = new self();
-        $self->recordThat(MemberRegistered::withData($aMemberId, $aMemberNumber, $aFirstName, $aLastName, $aVehicleId, $aJoiningDate, $aLeavingDate));
+        $self->recordThat(MemberRegistered::withData($aMemberId, $aMemberNumber, $aFirstName, $aLastName, $aVehicleId, $aJoiningDate));
 
         return $self;
     }
@@ -134,7 +133,6 @@ class Member extends AggregateRoot
         $this->lastName = $event->lastName();
         $this->vehicleId = $event->vehicleId();
         $this->joiningDate = $event->joiningDate();
-        $this->leavingDate = $event->leavingDate();
     }
 
     /**
