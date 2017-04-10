@@ -20,7 +20,7 @@ class Member extends AggregateRoot
     protected $firstName;
     /** @var string */
     protected $lastName;
-    /** @var int */
+    /** @var \Northfire\Domain\Model\Member\VehicleId */
     protected $vehicleId;
     /** @var \DateTime */
     protected $joiningDate;
@@ -33,6 +33,25 @@ class Member extends AggregateRoot
     protected function aggregateId()
     {
         return $this->memberId;
+    }
+
+    /**
+     * @param \Northfire\Domain\Model\Member\MemberId  $aMemberId
+     * @param string                                   $aMemberNumber
+     * @param string                                   $aFirstName
+     * @param string                                   $aLastName
+     * @param \Northfire\Domain\Model\Member\VehicleId $aVehicleId
+     * @param \DateTime                                $aJoiningDate
+     * @param \DateTime                                $aLeavingDate
+     *
+     * @return \Northfire\Domain\Model\Member\Member
+     */
+    public static function registerNew(MemberId $aMemberId, string $aMemberNumber, string $aFirstName, string $aLastName, VehicleId $aVehicleId, \DateTime $aJoiningDate, \DateTime $aLeavingDate): self
+    {
+        $self = new self();
+        $self->recordThat(MemberRegistered::withData($aMemberId, $aMemberNumber, $aFirstName, $aLastName, $aVehicleId, $aJoiningDate, $aLeavingDate));
+
+        return $self;
     }
 
     /**
@@ -68,9 +87,9 @@ class Member extends AggregateRoot
     }
 
     /**
-     * @return int
+     * @return \Northfire\Domain\Model\Member\VehicleId
      */
-    public function vehicleId(): int
+    public function vehicleId(): VehicleId
     {
         return $this->vehicleId;
     }
@@ -100,6 +119,22 @@ class Member extends AggregateRoot
     public function changeName(string $firstName, string $lastName)
     {
         $this->recordThat(NameChanged::withData($this->memberId, $firstName, $lastName));
+    }
+
+    /**
+     * @param \Northfire\Domain\Model\Member\MemberRegistered $event
+     *
+     * @return void
+     */
+    protected function whenMemberRegistered(MemberRegistered $event)
+    {
+        $this->memberId = $event->memberId();
+        $this->memberNumber = $event->memberNumber();
+        $this->firstName = $event->firstName();
+        $this->lastName = $event->lastName();
+        $this->vehicleId = $event->vehicleId();
+        $this->joiningDate = $event->joiningDate();
+        $this->leavingDate = $event->leavingDate();
     }
 
     /**

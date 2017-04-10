@@ -5,6 +5,10 @@
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
+        <service id="northfire.handler.member.register_new"
+                 class="Northfire\Application\Service\Member\RegisterMemberHandler">
+            <argument type="service" id="member_repository" />
+        </service>
         <service id="northfire.handler.member.change_name"
                  class="Northfire\Application\Service\Member\ChangeNameHandler">
             <argument type="service" id="member_repository" />
