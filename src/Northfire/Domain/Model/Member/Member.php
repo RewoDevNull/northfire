@@ -111,14 +111,14 @@ class Member extends AggregateRoot
     }
 
     /**
-     * @param string $firstName
-     * @param string $lastName
+     * @param string $aFirstName
+     * @param string $aLastName
      *
      * @return void
      */
-    public function changeName(string $firstName, string $lastName)
+    public function changeName(string $aFirstName, string $aLastName)
     {
-        $this->recordThat(NameChanged::withData($this->memberId, $firstName, $lastName));
+        $this->recordThat(NameChanged::withData($this->memberId, $aFirstName, $aLastName));
     }
 
     /**
