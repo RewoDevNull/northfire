@@ -1,0 +1,59 @@
+prooph_service_bus:
+    command_buses:
+        northfire_command_bus:
+            plugins:
+                - 'prooph_event_store_bus_bridge.transaction_manager'
+            router:
+                type: 'prooph_service_bus.command_bus_router'
+                routes:
+                    Northfire\Application\Service\Member\ChangeNameCommand': 'northfire.handler.member.change_name'
+
+#    query_buses:
+#        rewotec_query_bus:
+#            router:
+#                type: 'prooph_service_bus.query_bus_router'
+#                routes:
+#                    'Rewotec\Contract\Application\Services\Contract\ListContractsQuery': 'rewotec.order.order_overview_handler'
+#                    'Rewotec\OrderOverview\Application\Service\OrderOverview\OrderOverviewQuery': 'rewotec.order.order_overview_handler2'
+#
+#    event_buses:
+#        rewotec_event_bus:
+#            plugins:
+#                - 'prooph_service_bus.on_event_invoke_strategy'
+#            router:
+#                type: 'prooph_service_bus.event_bus_router'
+#                routes:
+#                    'Rewotec\Contract\Domain\Model\Order\OrderPlaced':
+#                        - 'rewotec.order_overview.dbal.order_overview_projector'
+#                        - 'rewotec.order_overview.mongo.order_overview_projector'
+#                        - 'rewotec.order_overview.mongo.order_contacts_projector'
+#
+prooph_event_store:
+    stores:
+        member_store:
+            adapter: 'prooph_event_store.doctrine_adapter.member_store'
+            repositories:
+                member_repository:
+                    repository_class: Northfire\Infrastructure\Persistence\Repository\EventStoreMemberRepository
+                    aggregate_type: Northfire\Domain\Model\Member\Member
+                    aggregate_translator: 'prooph_event_sourcing.aggregate_translator'
+                    stream_name: 'member_stream'
+
+services:
+    prooph_event_sourcing.aggregate_translator:
+        class: Prooph\EventSourcing\EventStoreIntegration\AggregateTranslator
+
+    prooph_event_store.doctrine_adapter.member_store:
+        class: Prooph\EventStore\Adapter\Doctrine\DoctrineEventStoreAdapter
+        arguments: ['@database_connection', '@prooph_event_store.message_factory', '@prooph_event_store.message_converter', '@prooph_event_store.payload_serializer', '%prooph_event_store.stream_table_map%']
+
+    prooph_event_store_bus_bridge.transaction_manager:
+        class: Prooph\EventStoreBusBridge\TransactionManager
+        tags:
+          - { name: 'prooph_event_store.order_store.plugin' }
+
+#    prooph_event_store_bus_bridge.member_event_publisher:
+#        class: Prooph\EventStoreBusBridge\EventPublisher
+#        arguments: ['@prooph_service_bus.northfire_event_bus']
+#        tags:
+#            - { name: 'prooph_event_store.order_store.plugin' }

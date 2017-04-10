@@ -15,6 +15,15 @@ class AppKernel extends Kernel
             new Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle(),
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
+            new \Doctrine\Bundle\MongoDBBundle\DoctrineMongoDBBundle(),
+            new \Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle(),
+
+            #Prooph
+            new \Prooph\Bundle\EventStore\ProophEventStoreBundle(),
+            new \Prooph\Bundle\ServiceBus\ProophServiceBusBundle(),
+
+            #Domain
+            new Northfire\Infrastructure\Symfony\NorthfireBundle\NorthfireBundle(),
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {

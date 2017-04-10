@@ -1,1 +1,5 @@
+northfire:
+    resource: "@NorthfireBundle/Resources/config/routing.xml"
+    prefix:   /
+
 
