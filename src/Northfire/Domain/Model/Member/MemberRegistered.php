@@ -64,7 +64,7 @@ final class MemberRegistered extends AggregateChanged
     public function memberId(): MemberId
     {
         if (null === $this->memberId) {
-            $this->memberId = MemberId::fromString($this->payload['memberId']);
+            $this->memberId = MemberId::fromString($this->aggregateId());
         }
 
         return $this->memberId;

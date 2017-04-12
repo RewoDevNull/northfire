@@ -25,9 +25,10 @@ class EventStoreMemberRepository extends AggregateRepository implements MemberRe
 
     /**
      * @inheritdoc
+     * @return \Northfire\Domain\Model\Member\Member|\stdClass|null
      */
-    public function get(MemberId $memberId): Member
+    public function get(MemberId $memberId) : Member
     {
-        $this->getAggregateRoot($memberId->toString());
+        return $this->getAggregateRoot($memberId->toString());
     }
 }

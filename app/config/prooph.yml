@@ -51,7 +51,7 @@ services:
     prooph_event_store_bus_bridge.transaction_manager:
         class: Prooph\EventStoreBusBridge\TransactionManager
         tags:
-          - { name: 'prooph_event_store.order_store.plugin' }
+          - { name: 'prooph_event_store.member_store.plugin' }
 
 #    prooph_event_store_bus_bridge.member_event_publisher:
 #        class: Prooph\EventStoreBusBridge\EventPublisher
