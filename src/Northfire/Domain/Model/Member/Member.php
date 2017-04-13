@@ -12,28 +12,26 @@ use Prooph\EventSourcing\AggregateRoot;
  */
 class Member extends AggregateRoot
 {
-    /** @var \Northfire\Domain\Model\Member\MemberId */
-    protected $memberId;
-    /** @var string */
-    protected $memberNumber;
     /** @var string */
     protected $firstName;
-    /** @var string */
-    protected $lastName;
-    /** @var \Northfire\Domain\Model\Member\VehicleId */
-    protected $vehicleId;
+
     /** @var \DateTime */
     protected $joiningDate;
+
+    /** @var string */
+    protected $lastName;
+
     /** @var \DateTime */
     protected $leavingDate;
 
-    /**
-     * @inheritdoc
-     */
-    protected function aggregateId()
-    {
-        return $this->memberId;
-    }
+    /** @var \Northfire\Domain\Model\Member\MemberId */
+    protected $memberId;
+
+    /** @var string */
+    protected $memberNumber;
+
+    /** @var \Northfire\Domain\Model\Member\VehicleId */
+    protected $vehicleId;
 
     /**
      * @param \Northfire\Domain\Model\Member\MemberId  $aMemberId
@@ -45,68 +43,12 @@ class Member extends AggregateRoot
      *
      * @return \Northfire\Domain\Model\Member\Member
      */
-    public static function registerNew(MemberId $aMemberId, string $aMemberNumber, string $aFirstName, string $aLastName, VehicleId $aVehicleId, \DateTime $aJoiningDate): self
+    public static function registerNew(MemberId $aMemberId, string $aMemberNumber, string $aFirstName, string $aLastName, VehicleId $aVehicleId, \DateTime $aJoiningDate) : self
     {
         $self = new self();
         $self->recordThat(MemberRegistered::withData($aMemberId, $aMemberNumber, $aFirstName, $aLastName, $aVehicleId, $aJoiningDate));
 
         return $self;
-    }
-
-    /**
-     * @return \Northfire\Domain\Model\Member\MemberId
-     */
-    public function memberId(): MemberId
-    {
-        return $this->memberId;
-    }
-
-    /**
-     * @return string
-     */
-    public function memberNumber(): string
-    {
-        return $this->memberNumber;
-    }
-
-    /**
-     * @return string
-     */
-    public function firstName(): string
-    {
-        return $this->firstName;
-    }
-
-    /**
-     * @return string
-     */
-    public function lastName(): string
-    {
-        return $this->lastName;
-    }
-
-    /**
-     * @return \Northfire\Domain\Model\Member\VehicleId
-     */
-    public function vehicleId(): VehicleId
-    {
-        return $this->vehicleId;
-    }
-
-    /**
-     * @return \DateTime
-     */
-    public function joiningDate(): \DateTime
-    {
-        return $this->joiningDate;
-    }
-
-    /**
-     * @return \DateTime
-     */
-    public function leavingDate(): \DateTime
-    {
-        return $this->leavingDate;
     }
 
     /**
@@ -117,7 +59,89 @@ class Member extends AggregateRoot
      */
     public function changeName(string $aFirstName, string $aLastName)
     {
+        if($this->firstName === $aFirstName && $this->lastName === $aLastName) {
+            return;
+        }
+
         $this->recordThat(NameChanged::withData($this->memberId, $aFirstName, $aLastName));
+    }
+
+    /**
+     * @param \Northfire\Domain\Model\Member\VehicleId $aNewVehicleId
+     *
+     * @return void
+     */
+    public function changeVehicle(VehicleId $aNewVehicleId)
+    {
+        if($this->vehicleId->sameValueAs($aNewVehicleId)) {
+            return;
+        }
+
+        $this->recordThat(VehicleChanged::withData($this->memberId, $aNewVehicleId, $this->vehicleId()));
+    }
+
+    /**
+     * @return string
+     */
+    public function firstName() : string
+    {
+        return $this->firstName;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function joiningDate() : \DateTime
+    {
+        return $this->joiningDate;
+    }
+
+    /**
+     * @return string
+     */
+    public function lastName() : string
+    {
+        return $this->lastName;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function leavingDate() : \DateTime
+    {
+        return $this->leavingDate;
+    }
+
+    /**
+     * @return \Northfire\Domain\Model\Member\MemberId
+     */
+    public function memberId() : MemberId
+    {
+        return $this->memberId;
+    }
+
+    /**
+     * @return string
+     */
+    public function memberNumber() : string
+    {
+        return $this->memberNumber;
+    }
+
+    /**
+     * @return \Northfire\Domain\Model\Member\VehicleId
+     */
+    public function vehicleId() : VehicleId
+    {
+        return $this->vehicleId;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function aggregateId()
+    {
+        return $this->memberId;
     }
 
     /**
@@ -144,5 +168,15 @@ class Member extends AggregateRoot
     {
         $this->firstName = $event->firstName();
         $this->lastName = $event->lastName();
+    }
+
+    /**
+     * @param \Northfire\Domain\Model\Member\VehicleChanged $event
+     *
+     * @return void
+     */
+    protected function whenVehicleChanged(VehicleChanged $event)
+    {
+        $this->vehicleId = $event->newVehicleId();
     }
 }

@@ -67,6 +67,34 @@ class MemberTest extends TestCase
     }
 
     /**
+     * Test the member domain model for recording the NameChanged event.
+     */
+    public function testDomainModelMemberVehicleChanged()
+    {
+        $member = $this->createMember();
+
+        $oldVehicleId = $member->vehicleId();
+        $newVehicleId = VehicleId::generate();
+
+        $member->changeVehicle($newVehicleId);
+
+        $aggregateRootVersion = TestUtil::aggregateRootDecorator()->extractAggregateVersion($member);
+        $recordedEvents = TestUtil::aggregateRootDecorator()->extractRecordedEvents($member);
+
+        $this->assertCount(2, $recordedEvents);
+        $this->assertInstanceOf(VehicleChanged::class, $recordedEvents[1]);
+        $this->assertEquals(2, $aggregateRootVersion);
+
+        $this->assertEquals($member->memberId()->toString(), $recordedEvents[1]->aggregateId());
+        $this->assertCount(2, $recordedEvents[1]->payload());
+        $this->assertArrayHasKey('oldVehicleId', $recordedEvents[1]->payload());
+        $this->assertArrayHasKey('newVehicleId', $recordedEvents[1]->payload());
+
+        $this->assertEquals($oldVehicleId->toString(), $recordedEvents[1]->payload()['oldVehicleId']);
+        $this->assertEquals($newVehicleId->toString(), $recordedEvents[1]->payload()['newVehicleId']);
+    }
+
+    /**
      * @return \Northfire\Domain\Model\Member\Member
      */
     private function createMember() : Member
