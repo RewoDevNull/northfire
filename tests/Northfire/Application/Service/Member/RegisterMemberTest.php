@@ -48,19 +48,29 @@ class RegisterMemberTest extends TestCase
 
         $recordedEvents = TestUtil::retrieveRecordedEvents($eventStore, 'member_stream');
         $this->assertCount(1, $recordedEvents);
-        $this->assertInstanceOf(MemberRegistered::class, $recordedEvents[0]);
 
-        $this->assertCount(5, $recordedEvents[0]->payload());
-        $this->assertArrayHasKey('memberNumber', $recordedEvents[0]->payload());
-        $this->assertArrayHasKey('firstName', $recordedEvents[0]->payload());
-        $this->assertArrayHasKey('lastName', $recordedEvents[0]->payload());
-        $this->assertArrayHasKey('vehicleId', $recordedEvents[0]->payload());
-        $this->assertArrayHasKey('joiningDate', $recordedEvents[0]->payload());
+        /** @var MemberRegistered $event */
+        $event = $recordedEvents[0];
 
-        $this->assertEquals('01-00', $recordedEvents[0]->payload()['memberNumber']);
-        $this->assertEquals('Max', $recordedEvents[0]->payload()['firstName']);
-        $this->assertEquals('Mustermann', $recordedEvents[0]->payload()['lastName']);
-        $this->assertEquals($command->vehicleId, $recordedEvents[0]->payload()['vehicleId']);
-        $this->assertEquals($command->joiningDate->format('d.m.Y H:i:s'), $recordedEvents[0]->payload()['joiningDate']);
+        $this->assertInstanceOf(MemberRegistered::class, $event);
+
+        $this->assertCount(5, $event->payload());
+        $this->assertArrayHasKey('memberNumber', $event->payload());
+        $this->assertArrayHasKey('firstName', $event->payload());
+        $this->assertArrayHasKey('lastName', $event->payload());
+        $this->assertArrayHasKey('vehicleId', $event->payload());
+        $this->assertArrayHasKey('joiningDate', $event->payload());
+
+        $this->assertEquals('01-00', $event->payload()['memberNumber']);
+        $this->assertEquals('Max', $event->payload()['firstName']);
+        $this->assertEquals('Mustermann', $event->payload()['lastName']);
+        $this->assertEquals($command->vehicleId, $event->payload()['vehicleId']);
+        $this->assertEquals($command->joiningDate->format('d.m.Y H:i:s'), $event->payload()['joiningDate']);
+
+        $this->assertEquals($event->payload()['memberNumber'], $event->memberNumber());
+        $this->assertEquals($event->payload()['firstName'], $event->firstName());
+        $this->assertEquals($event->payload()['lastName'], $event->lastName());
+        $this->assertEquals($event->payload()['vehicleId'], $event->vehicleId()->toString());
+        $this->assertEquals($event->payload()['joiningDate'], $event->joiningDate()->format('d.m.Y H:i:s'));
     }
 }

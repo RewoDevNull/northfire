@@ -59,17 +59,24 @@ class NameChangedTest extends TestCase
         $command->lastName = 'Müller';
 
         $commandBus->dispatch($command);
+
         $recordedEvents = TestUtil::retrieveRecordedEvents($eventStore, 'member_stream');
+        $this->assertCount(1, $recordedEvents);
 
-        $this->assertInstanceOf(NameChanged::class, $recordedEvents[0]);
+        /** @var NameChanged $event */
+        $event = $recordedEvents[0];
 
-        $this->assertEquals($memberId, $recordedEvents[0]->aggregateId());
-        $this->assertCount(2, $recordedEvents[0]->payload());
-        $this->assertArrayHasKey('firstName', $recordedEvents[0]->payload());
-        $this->assertArrayHasKey('lastName', $recordedEvents[0]->payload());
+        $this->assertInstanceOf(NameChanged::class, $event);
 
-        $this->assertEquals($memberId, $recordedEvents[0]->aggregateId());
-        $this->assertEquals('Lieschen', $recordedEvents[0]->payload()['firstName']);
-        $this->assertEquals('Müller', $recordedEvents[0]->payload()['lastName']);
+        $this->assertEquals($memberId, $event->aggregateId());
+        $this->assertCount(2, $event->payload());
+        $this->assertArrayHasKey('firstName', $event->payload());
+        $this->assertArrayHasKey('lastName', $event->payload());
+
+        $this->assertEquals($memberId, $event->aggregateId());
+        $this->assertEquals('Lieschen', $event->payload()['firstName']);
+        $this->assertEquals('Müller', $event->payload()['lastName']);
+        $this->assertEquals($event->payload()['firstName'], $event->firstName());
+        $this->assertEquals($event->payload()['lastName'], $event->lastName());
     }
 }

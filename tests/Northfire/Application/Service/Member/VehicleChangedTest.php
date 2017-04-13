@@ -62,8 +62,11 @@ class VehicleChangedTest extends TestCase
 
         $commandBus->dispatch($command);
 
+        $recordedEvents = TestUtil::retrieveRecordedEvents($eventStore, 'member_stream');
+        $this->assertCount(1, $recordedEvents);
+
         /** @var VehicleChanged $event */
-        $event = TestUtil::retrieveRecordedEvents($eventStore, 'member_stream')[0];
+        $event = $recordedEvents[0];
 
         $this->assertInstanceOf(VehicleChanged::class, $event);
 
@@ -73,7 +76,9 @@ class VehicleChangedTest extends TestCase
         $this->assertArrayHasKey('newVehicleId', $event->payload());
 
         $this->assertEquals($memberId, $event->aggregateId());
-        $this->assertEquals($oldVehicleId->toString(), $event->oldVehicleId()->toString());
-        $this->assertEquals($newVehicleId->toString(), $event->newVehicleId()->toString());
+        $this->assertEquals($oldVehicleId->toString(), $event->payload()['oldVehicleId']);
+        $this->assertEquals($newVehicleId->toString(), $event->payload()['newVehicleId']);
+        $this->assertEquals($event->payload()['oldVehicleId'], $event->oldVehicleId()->toString());
+        $this->assertEquals($event->payload()['newVehicleId'], $event->newVehicleId()->toString());
     }
 }
