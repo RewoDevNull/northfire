@@ -2,6 +2,7 @@
 
 namespace Northfire\Domain\Model\Member;
 
+use Northfire\Domain\Model\IdentifiableInterface;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 
@@ -11,7 +12,7 @@ use Ramsey\Uuid\UuidInterface;
  * @package Northfire\Domain\Model\Member
  * @author  Hauke Weber <h.weber@rewotec.net>
  */
-class VehicleId
+class VehicleId implements IdentifiableInterface
 {
     /** @var \Ramsey\Uuid\UuidInterface */
     private $uuid;

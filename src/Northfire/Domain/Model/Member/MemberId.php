@@ -2,6 +2,7 @@
 
 namespace Northfire\Domain\Model\Member;
 
+use Northfire\Domain\Model\IdentifiableInterface;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 
@@ -11,7 +12,7 @@ use Ramsey\Uuid\UuidInterface;
  * @package Northfire\Domain\Model
  * @author  Hauke Weber <h.weber@rewotec.net>
  */
-class MemberId
+class MemberId implements IdentifiableInterface
 {
     /** @var \Ramsey\Uuid\UuidInterface */
     private $uuid;
@@ -29,17 +30,9 @@ class MemberId
     /**
      * @return string
      */
-    public function __toString(): string
+    public function __toString() : string
     {
         return $this->toString();
-    }
-
-    /**
-     * @return \Northfire\Domain\Model\Member\MemberId
-     */
-    public static function generate(): self
-    {
-        return new self(Uuid::uuid4());
     }
 
     /**
@@ -47,9 +40,17 @@ class MemberId
      *
      * @return \Northfire\Domain\Model\Member\MemberId
      */
-    public static function fromString(string $memberId): self
+    public static function fromString(string $memberId) : self
     {
         return new self(Uuid::fromString($memberId));
+    }
+
+    /**
+     * @return \Northfire\Domain\Model\Member\MemberId
+     */
+    public static function generate() : self
+    {
+        return new self(Uuid::uuid4());
     }
 
     /**
@@ -57,7 +58,7 @@ class MemberId
      *
      * @return bool
      */
-    public function sameValueAs(MemberId $other): bool
+    public function sameValueAs(MemberId $other) : bool
     {
         return ($this->toString() === $other->toString());
     }
@@ -65,7 +66,7 @@ class MemberId
     /**
      * @return string
      */
-    public function toString(): string
+    public function toString() : string
     {
         return $this->uuid->toString();
     }
