@@ -2,6 +2,9 @@
 
 namespace Northfire\Domain\Model\Member;
 
+use Northfire\Domain\Model\Member\Event\MemberRegistered;
+use Northfire\Domain\Model\Member\Event\NameChanged;
+use Northfire\Domain\Model\Member\Event\VehicleChanged;
 use Northfire\Infrastructure\Utils\TestUtil;
 use PHPUnit\Framework\TestCase;
 
@@ -16,60 +19,62 @@ class MemberTest extends TestCase
     /**
      * Test the member domain model for recording the NameChanged event.
      */
-    public function testDomainModelMemberNameChanged()
+    public function testMemberNameChanged()
     {
         $member = $this->createMember();
         $member->changeName('Lieschen', 'Müller');
 
         $aggregateRootVersion = TestUtil::aggregateRootDecorator()->extractAggregateVersion($member);
         $recordedEvents = TestUtil::aggregateRootDecorator()->extractRecordedEvents($member);
+        $event = $recordedEvents[1];
 
         $this->assertCount(2, $recordedEvents);
-        $this->assertInstanceOf(NameChanged::class, $recordedEvents[1]);
+        $this->assertInstanceOf(NameChanged::class, $event);
         $this->assertEquals(2, $aggregateRootVersion);
 
-        $this->assertEquals($member->memberId()->toString(), $recordedEvents[1]->aggregateId());
-        $this->assertCount(2, $recordedEvents[1]->payload());
-        $this->assertArrayHasKey('firstName', $recordedEvents[1]->payload());
-        $this->assertArrayHasKey('lastName', $recordedEvents[1]->payload());
+        $this->assertEquals($member->memberId()->toString(), $event->aggregateId());
+        $this->assertCount(2, $event->payload());
+        $this->assertArrayHasKey('firstName', $event->payload());
+        $this->assertArrayHasKey('lastName', $event->payload());
 
-        $this->assertEquals('Lieschen', $recordedEvents[1]->payload()['firstName']);
-        $this->assertEquals('Müller', $recordedEvents[1]->payload()['lastName']);
+        $this->assertEquals('Lieschen', $event->payload()['firstName']);
+        $this->assertEquals('Müller', $event->payload()['lastName']);
     }
 
     /**
      * Test the member domain model for recording the MemberRegistered event.
      */
-    public function testDomainModelMemberRegistered()
+    public function testMemberRegistered()
     {
         $member = $this->createMember();
 
         $aggregateRootVersion = TestUtil::aggregateRootDecorator()->extractAggregateVersion($member);
         $recordedEvents = TestUtil::aggregateRootDecorator()->extractRecordedEvents($member);
+        $event = $recordedEvents[0];
 
         $this->assertCount(1, $recordedEvents);
-        $this->assertInstanceOf(MemberRegistered::class, $recordedEvents[0]);
+        $this->assertInstanceOf(MemberRegistered::class, $event);
         $this->assertEquals(1, $aggregateRootVersion);
 
-        $this->assertEquals($member->memberId()->toString(), $recordedEvents[0]->aggregateId());
-        $this->assertCount(5, $recordedEvents[0]->payload());
-        $this->assertArrayHasKey('memberNumber', $recordedEvents[0]->payload());
-        $this->assertArrayHasKey('firstName', $recordedEvents[0]->payload());
-        $this->assertArrayHasKey('lastName', $recordedEvents[0]->payload());
-        $this->assertArrayHasKey('vehicleId', $recordedEvents[0]->payload());
-        $this->assertArrayHasKey('joiningDate', $recordedEvents[0]->payload());
+        $this->assertEquals($member->memberId()->toString(), $event->aggregateId());
+        $this->assertCount(5, $event->payload());
+        $this->assertArrayHasKey('memberNumber', $event->payload());
+        $this->assertArrayHasKey('firstName', $event->payload());
+        $this->assertArrayHasKey('lastName', $event->payload());
+        $this->assertArrayHasKey('vehicleId', $event->payload());
+        $this->assertArrayHasKey('joiningDate', $event->payload());
 
-        $this->assertEquals('01-00', $recordedEvents[0]->payload()['memberNumber']);
-        $this->assertEquals('Max', $recordedEvents[0]->payload()['firstName']);
-        $this->assertEquals('Mustermann', $recordedEvents[0]->payload()['lastName']);
-        $this->assertEquals($member->vehicleId()->toString(), $recordedEvents[0]->payload()['vehicleId']);
-        $this->assertEquals($member->joiningDate()->format('d.m.Y H:i:s'), $recordedEvents[0]->payload()['joiningDate']);
+        $this->assertEquals('01-00', $event->payload()['memberNumber']);
+        $this->assertEquals('Max', $event->payload()['firstName']);
+        $this->assertEquals('Mustermann', $event->payload()['lastName']);
+        $this->assertEquals($member->vehicleId()->toString(), $event->payload()['vehicleId']);
+        $this->assertEquals($member->joiningDate()->format('d.m.Y H:i:s'), $event->payload()['joiningDate']);
     }
 
     /**
      * Test the member domain model for recording the NameChanged event.
      */
-    public function testDomainModelMemberVehicleChanged()
+    public function testMemberVehicleChanged()
     {
         $member = $this->createMember();
 
@@ -80,18 +85,19 @@ class MemberTest extends TestCase
 
         $aggregateRootVersion = TestUtil::aggregateRootDecorator()->extractAggregateVersion($member);
         $recordedEvents = TestUtil::aggregateRootDecorator()->extractRecordedEvents($member);
+        $event = $recordedEvents[1];
 
         $this->assertCount(2, $recordedEvents);
-        $this->assertInstanceOf(VehicleChanged::class, $recordedEvents[1]);
+        $this->assertInstanceOf(VehicleChanged::class, $event);
         $this->assertEquals(2, $aggregateRootVersion);
 
-        $this->assertEquals($member->memberId()->toString(), $recordedEvents[1]->aggregateId());
-        $this->assertCount(2, $recordedEvents[1]->payload());
-        $this->assertArrayHasKey('oldVehicleId', $recordedEvents[1]->payload());
-        $this->assertArrayHasKey('newVehicleId', $recordedEvents[1]->payload());
+        $this->assertEquals($member->memberId()->toString(), $event->aggregateId());
+        $this->assertCount(2, $event->payload());
+        $this->assertArrayHasKey('oldVehicleId', $event->payload());
+        $this->assertArrayHasKey('newVehicleId', $event->payload());
 
-        $this->assertEquals($oldVehicleId->toString(), $recordedEvents[1]->payload()['oldVehicleId']);
-        $this->assertEquals($newVehicleId->toString(), $recordedEvents[1]->payload()['newVehicleId']);
+        $this->assertEquals($oldVehicleId->toString(), $event->payload()['oldVehicleId']);
+        $this->assertEquals($newVehicleId->toString(), $event->payload()['newVehicleId']);
     }
 
     /**

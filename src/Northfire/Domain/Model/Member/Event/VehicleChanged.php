@@ -1,7 +1,9 @@
 <?php
 
-namespace Northfire\Domain\Model\Member;
+namespace Northfire\Domain\Model\Member\Event;
 
+use Northfire\Domain\Model\Member\MemberId;
+use Northfire\Domain\Model\Member\VehicleId;
 use Prooph\EventSourcing\AggregateChanged;
 
 /**
@@ -26,7 +28,7 @@ final class VehicleChanged extends AggregateChanged
      * @param \Northfire\Domain\Model\Member\VehicleId $newVehicleId
      * @param \Northfire\Domain\Model\Member\VehicleId $oldVehicleId
      *
-     * @return \Northfire\Domain\Model\Member\VehicleChanged
+     * @return \Northfire\Domain\Model\Member\Event\VehicleChanged
      */
     public static function withData(MemberId $memberId, VehicleId $newVehicleId, VehicleId $oldVehicleId) : self
     {

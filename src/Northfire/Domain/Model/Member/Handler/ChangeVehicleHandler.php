@@ -1,13 +1,14 @@
 <?php
 
-namespace Northfire\Application\Service\Member;
+namespace Northfire\Domain\Model\Member\Handler;
 
+use Northfire\Domain\Model\Member\Command\ChangeVehicle;
 use Northfire\Domain\Model\Member\MemberRepositoryInterface;
 
 /**
  * Class ChangeVehicleHandler
  *
- * @package Northfire\Application\Service\Member
+ * @package Northfire\Domain\Model\Member\Handler
  * @author  Hauke Weber
  */
 final class ChangeVehicleHandler
@@ -26,9 +27,9 @@ final class ChangeVehicleHandler
     }
 
     /**
-     * @param \Northfire\Application\Service\Member\ChangeVehicleCommand $command
+     * @param \Northfire\Domain\Model\Member\Command\ChangeVehicle $command
      */
-    public function __invoke(ChangeVehicleCommand $command)
+    public function __invoke(ChangeVehicle $command)
     {
         $member = $this->memberRepository->get($command->memberId());
         $member->changeVehicle($command->vehicleId());

@@ -1,6 +1,6 @@
 <?php
 
-namespace Northfire\Application\Service\Member;
+namespace Northfire\Domain\Model\Member\Command;
 
 use Northfire\Domain\Model\Member\MemberId;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -8,10 +8,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Class ChangeNameCommand
  *
- * @package Northfire\Application\Service\Member
+ * @package Northfire\Domain\Model\Member\Handler
  * @author  Hauke Weber <h.weber@rewotec.net>
  */
-final class ChangeNameCommand
+final class ChangeName
 {
     /** @var string */
     public $memberId;

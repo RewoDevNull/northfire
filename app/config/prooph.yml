@@ -6,8 +6,8 @@ prooph_service_bus:
             router:
                 type: 'prooph_service_bus.command_bus_router'
                 routes:
-                    'Northfire\Application\Service\Member\RegisterMemberCommand': 'northfire.handler.member.register_new'
-                    'Northfire\Application\Service\Member\ChangeNameCommand': 'northfire.handler.member.change_name'
+                    'Northfire\Domain\Model\Member\Command\RegisterMember': 'northfire.handler.member.register_new'
+                    'Northfire\Domain\Model\Member\Command\ChangeName': 'northfire.handler.member.change_name'
 
 #    query_buses:
 #        rewotec_query_bus:

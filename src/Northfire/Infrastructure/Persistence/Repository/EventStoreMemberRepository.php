@@ -31,4 +31,13 @@ class EventStoreMemberRepository extends AggregateRepository implements MemberRe
     {
         return $this->getAggregateRoot($memberId->toString());
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function version(Member $member) : int
+    {
+        return $this->extractAggregateVersion($member);
+    }
+
 }

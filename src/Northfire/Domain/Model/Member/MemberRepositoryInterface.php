@@ -23,4 +23,11 @@ interface MemberRepositoryInterface
      * @return \Northfire\Domain\Model\Member\Member
      */
     public function get(MemberId $memberId) : Member;
+
+    /**
+     * @param \Northfire\Domain\Model\Member\Member $member
+     *
+     * @return int
+     */
+    public function version(Member $member) : int;
 }

@@ -2,6 +2,9 @@
 
 namespace Northfire\Domain\Model\Member;
 
+use Northfire\Domain\Model\Member\Event\MemberRegistered;
+use Northfire\Domain\Model\Member\Event\NameChanged;
+use Northfire\Domain\Model\Member\Event\VehicleChanged;
 use Prooph\EventSourcing\AggregateRoot;
 
 /**
@@ -145,7 +148,7 @@ class Member extends AggregateRoot
     }
 
     /**
-     * @param \Northfire\Domain\Model\Member\MemberRegistered $event
+     * @param \Northfire\Domain\Model\Member\Event\MemberRegistered $event
      *
      * @return void
      */
@@ -160,7 +163,7 @@ class Member extends AggregateRoot
     }
 
     /**
-     * @param \Northfire\Domain\Model\Member\NameChanged $event
+     * @param \Northfire\Domain\Model\Member\Event\NameChanged $event
      *
      * @return void
      */
@@ -171,7 +174,7 @@ class Member extends AggregateRoot
     }
 
     /**
-     * @param \Northfire\Domain\Model\Member\VehicleChanged $event
+     * @param \Northfire\Domain\Model\Member\Event\VehicleChanged $event
      *
      * @return void
      */

@@ -1,13 +1,14 @@
 <?php
 
-namespace Northfire\Application\Service\Member;
+namespace Northfire\Domain\Model\Member\Handler;
 
+use Northfire\Domain\Model\Member\Command\ChangeName;
 use Northfire\Domain\Model\Member\MemberRepositoryInterface;
 
 /**
  * Class ChangeNameHandler
  *
- * @package Northfire\Application\Service\Member
+ * @package Northfire\Domain\Model\Member\Handler
  * @author  Hauke Weber <h.weber@rewotec.net>
  */
 final class ChangeNameHandler
@@ -26,9 +27,9 @@ final class ChangeNameHandler
     }
 
     /**
-     * @param \Northfire\Application\Service\Member\ChangeNameCommand $command
+     * @param \Northfire\Domain\Model\Member\Command\ChangeName $command
      */
-    public function __invoke(ChangeNameCommand $command)
+    public function __invoke(ChangeName $command)
     {
         $member = $this->memberRepository->get($command->memberId());
         $member->changeName($command->firstName(), $command->lastName());

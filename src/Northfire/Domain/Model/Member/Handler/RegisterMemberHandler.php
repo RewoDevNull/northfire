@@ -1,7 +1,8 @@
 <?php
 
-namespace Northfire\Application\Service\Member;
+namespace Northfire\Domain\Model\Member\Handler;
 
+use Northfire\Domain\Model\Member\Command\RegisterMember;
 use Northfire\Domain\Model\Member\Member;
 use Northfire\Domain\Model\Member\MemberRepositoryInterface;
 use Northfire\Domain\Model\Member\VehicleId;
@@ -9,7 +10,7 @@ use Northfire\Domain\Model\Member\VehicleId;
 /**
  * Class RegisterMemberHandler
  *
- * @package Northfire\Application\Service\Member
+ * @package Northfire\Domain\Model\Member\Handler
  * @author  Hauke Weber <h.weber@rewotec.net>
  */
 final class RegisterMemberHandler
@@ -28,9 +29,9 @@ final class RegisterMemberHandler
     }
 
     /**
-     * @param \Northfire\Application\Service\Member\RegisterMemberCommand $command
+     * @param \Northfire\Domain\Model\Member\Command\RegisterMember $command
      */
-    public function __invoke(RegisterMemberCommand $command)
+    public function __invoke(RegisterMember $command)
     {
         $member = Member::registerNew(
             $command->memberId(),
