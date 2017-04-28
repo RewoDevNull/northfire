@@ -53,6 +53,13 @@ services:
         tags:
           - { name: 'prooph_event_store.member_store.plugin' }
 
+    prooph_event_store.member_store.metadata_enricher:
+        class: Northfire\Infrastructure\Persistence\MetadataEnricher\EventStoreMemberMetadataEnricher
+        arguments: ['@security.token_storage']
+        tags:
+          - { name: 'prooph_event_store.member_store.metadata_enricher' }
+
+
 #    prooph_event_store_bus_bridge.member_event_publisher:
 #        class: Prooph\EventStoreBusBridge\EventPublisher
 #        arguments: ['@prooph_service_bus.northfire_event_bus']
