@@ -14,3 +14,5 @@
 !var/SymfonyRequirements.php
 /vendor/
 /web/bundles/
+Würde .idea/ löschen
+Würde src/Northfire/Infrastructure/Persistence/Plugin/ löschen

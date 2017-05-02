@@ -48,7 +48,8 @@
     "doctrine/dbal": "2.5.4"    ,
     "doctrine/migrations": "1.2.*",
     "doctrine/doctrine-migrations-bundle": "1.1.*",
-    "knplabs/knp-snappy-bundle": "1.4"
+    "php-amqplib/rabbitmq-bundle": "1.12.*",
+    "phobetor/rabbitmq-supervisor-bundle": "2.*"
 
   },
   "require-dev": {

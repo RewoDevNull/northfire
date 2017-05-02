@@ -22,6 +22,10 @@ class AppKernel extends Kernel
             new \Prooph\Bundle\EventStore\ProophEventStoreBundle(),
             new \Prooph\Bundle\ServiceBus\ProophServiceBusBundle(),
 
+            #RabbitMQ
+            new OldSound\RabbitMqBundle\OldSoundRabbitMqBundle(),
+            new Phobetor\RabbitMqSupervisorBundle\RabbitMqSupervisorBundle(),
+
             #Domain
             new Northfire\Infrastructure\Symfony\NorthfireBundle\NorthfireBundle(),
         ];

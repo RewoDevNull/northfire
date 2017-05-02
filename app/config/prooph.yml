@@ -17,18 +17,16 @@ prooph_service_bus:
 #                    'Rewotec\Contract\Application\Services\Contract\ListContractsQuery': 'rewotec.order.order_overview_handler'
 #                    'Rewotec\OrderOverview\Application\Service\OrderOverview\OrderOverviewQuery': 'rewotec.order.order_overview_handler2'
 #
-#    event_buses:
-#        rewotec_event_bus:
-#            plugins:
-#                - 'prooph_service_bus.on_event_invoke_strategy'
-#            router:
-#                type: 'prooph_service_bus.event_bus_router'
-#                routes:
-#                    'Rewotec\Contract\Domain\Model\Order\OrderPlaced':
-#                        - 'rewotec.order_overview.dbal.order_overview_projector'
-#                        - 'rewotec.order_overview.mongo.order_overview_projector'
-#                        - 'rewotec.order_overview.mongo.order_contacts_projector'
-#
+    event_buses:
+        northfire_event_bus:
+            plugins:
+                - 'prooph_service_bus.on_event_invoke_strategy'
+            router:
+                type: 'prooph_service_bus.event_bus_router'
+                routes:
+                    'Northfire\Domain\Model\Member\Event\MemberRegistered':
+                        - 'northfire.member_event_publisher'
+
 prooph_event_store:
     stores:
         member_store:
@@ -59,9 +57,12 @@ services:
         tags:
           - { name: 'prooph_event_store.member_store.metadata_enricher' }
 
+    prooph_event_store_bus_bridge.member_event_publisher:
+        class: Prooph\EventStoreBusBridge\EventPublisher
+        arguments: ['@prooph_service_bus.northfire_event_bus']
+        tags:
+            - { name: 'prooph_event_store.member_store.plugin' }
 
-#    prooph_event_store_bus_bridge.member_event_publisher:
-#        class: Prooph\EventStoreBusBridge\EventPublisher
-#        arguments: ['@prooph_service_bus.northfire_event_bus']
-#        tags:
-#            - { name: 'prooph_event_store.order_store.plugin' }
+    northfire.member_event_publisher:
+        class: Northfire\Infrastructure\EventPublisher\MemberEventPublisher
+        arguments: ['@old_sound_rabbit_mq.northfire_message_producer']

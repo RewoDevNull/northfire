@@ -2,6 +2,7 @@ imports:
     - { resource: parameters.yml }
     - { resource: security.yml }
     - { resource: services.yml }
+    - { resource: rabbitmq.yml }
     - { resource: prooph.yml }
     - { resource: "@NorthfireBundle/Resources/config/services.xml" }
 
