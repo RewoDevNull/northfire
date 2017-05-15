@@ -18,6 +18,8 @@ class MemberAsyncEventConsumer implements ConsumerInterface
         $i = 1;
         $event = unserialize($msg->getBody());
         $i = 1;
+
+        return ConsumerInterface::MSG_ACK;
     }
 
 }
